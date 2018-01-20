@@ -1,4 +1,5 @@
 from picamera import PiCamera
+import os
 import RPi.GPIO as GPIO
 import time
 import glob
@@ -60,11 +61,11 @@ try:
         distance1 = get_distance()
         freeSpace = (statvfs.f_frsize * statvfs.f_bavail / 1000000000)  # Free space on the system in gigabytes
 
-        if freeSpace < 5:  # if space on the system is smaller than 5 gb, delete the oldest file
+        if freeSpace < 5:  # if space on the system is smaller than 5 gb, delete the oldest file until the free space is back to 7gb
             print("no space")
 
             while freeSpace < 7:
-                list_of_files = glob.glob(videosFolderPath)  # * means all if need specific format then *.csv
+                list_of_files = glob.glob(videosFolderPath)  
                 latest_file = min(list_of_files, key=os.path.getctime)
                 print(latest_file + " delete oldest file")
                 os.remove(videosFolderPath)
